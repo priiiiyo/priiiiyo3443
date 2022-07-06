@@ -1,5 +1,3 @@
-import logging
-
 from logging import getLogger, FileHandler, StreamHandler, INFO, basicConfig, error as log_error, info as log_info, warning as log_warning
 from socket import setdefaulttimeout
 from faulthandler import enable as faulthandler_enable
@@ -470,20 +468,6 @@ try:
 except KeyError:
     TIMEZONE = "Asia/Kolkata"
 try:
-    HEROKU_APP_NAME = getConfig("HEROKU_APP_NAME")
-    if len(HEROKU_APP_NAME) == 0:
-        raise KeyError
-except KeyError:
-    log_warning("HEROKU_APP_NAME not provided!")
-    HEROKU_APP_NAME = None
-try:
-    HEROKU_API_KEY = getConfig("HEROKU_API_KEY")
-    if len(HEROKU_API_KEY) == 0:
-        raise KeyError
-except KeyError:
-    log_warning("HEROKU_API_KEY not provided!")
-    HEROKU_API_KEY = None
-try:
     LEECH_ENABLED = getConfig("LEECH_ENABLED")
     LEECH_ENABLED = LEECH_ENABLED.lower() == "true"
 except BaseException:
@@ -620,7 +604,7 @@ try:
     VIRUSTOTAL_API = getConfig('VIRUSTOTAL_API')
     if len(VIRUSTOTAL_API) < 4: raise KeyError
 except KeyError:
-    logging.warning('VIRUSTOTAL_API not provided.')
+    log_warning('VIRUSTOTAL_API not provided.')
     VIRUSTOTAL_API = None
 try:
     VIRUSTOTAL_FREE = getConfig('VIRUSTOTAL_FREE').lower() == 'true'
@@ -640,25 +624,25 @@ try:
     if len(SPAMWATCH_ANTISPAM_API) == 0: raise KeyError
     else: logging.info('Using SPAMWATCH_ANTISPAM_API')
 except KeyError:
-    logging.info('Not using SPAMWATCH_ANTISPAM_API')
+    log_info('Not using SPAMWATCH_ANTISPAM_API')
     SPAMWATCH_ANTISPAM_API = None
 try:
     USERGE_ANTISPAM_API = getConfig('USERGE_ANTISPAM_API')
     if len(USERGE_ANTISPAM_API) == 0: raise KeyError
     else: logging.info('Using USERGE_ANTISPAM_API')
 except KeyError:
-    logging.info('Not using USERGE_ANTISPAM_API')
+    log_info('Not using USERGE_ANTISPAM_API')
     USERGE_ANTISPAM_API = None
 try:
     COMBOT_CAS_ANTISPAM = getConfig('COMBOT_CAS_ANTISPAM').lower() == 'true'
-    logging.info('Using COMBOT_CAS_ANTISPAM')
+    log_info('Using COMBOT_CAS_ANTISPAM')
 except KeyError:
     logging.info('No using COMBOT_CAS_ANTISPAM')
     COMBOT_CAS_ANTISPAM = None
 
 try:
     INTELLIVOID_ANTISPAM = getConfig('INTELLIVOID_ANTISPAM').lower() == 'true'
-    logging.info('Using INTELLIVOID_ANTISPAM')
+    log_info('Using INTELLIVOID_ANTISPAM')
 except KeyError:
     logging.info('No using INTELLIVOID_ANTISPAM')
     INTELLIVOID_ANTISPAM = None
