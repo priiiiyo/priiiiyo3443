@@ -1,4 +1,4 @@
-from logging import getLogger, FileHandler, StreamHandler, INFO, basicConfig, error as log_error, info as log_info, warning as log_warning
+from logging import getLogger, FileHandler, StreamHandler, INFO, basicConfig, warning, error as log_error, info as log_info, warning as log_warning
 from socket import setdefaulttimeout
 from faulthandler import enable as faulthandler_enable
 from telegram.ext import Updater as tgUpdater
@@ -618,7 +618,7 @@ try:
     VIRUSTOTAL_API = getConfig('VIRUSTOTAL_API')
     if len(VIRUSTOTAL_API) < 4: raise KeyError
 except KeyError:
-    logging.warn('VIRUSTOTAL_API not provided.')
+    logging.warning('VIRUSTOTAL_API not provided.')
     VIRUSTOTAL_API = None
 try:
     VIRUSTOTAL_FREE = getConfig('VIRUSTOTAL_FREE').lower() == 'true'
