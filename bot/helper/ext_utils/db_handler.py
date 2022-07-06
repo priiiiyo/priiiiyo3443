@@ -61,15 +61,15 @@ class DbManger:
             for row in rows:
                 if row[1] and row[0] not in SUDO_USERS:
                     SUDO_USERS.add(row[0])
-                if row[2] and row[0] not in MOD_USERS:
+                elif row[2] and row[0] not in MOD_USERS:
                     MOD_USERS.add(row[0])
-                elif row[3] and row[0] not in AUTHORIZED_CHATS:
+                if row[3] and row[0] not in AUTHORIZED_CHATS:
                     AUTHORIZED_CHATS.add(row[0])
-                if row[4]:
+                elif row[4]:
                     AS_MEDIA_USERS.add(row[0])
-                elif row[5]:
+                if row[5]:
                     AS_DOC_USERS.add(row[0])
-                if row[6] and row[0] not in LEECH_LOG:
+                elif row[6] and row[0] not in LEECH_LOG:
                     LEECH_LOG.add(row[0])
                 if row[7] and row[0] not in LEECH_LOG_ALT:
                     LEECH_LOG_ALT.add(row[0])
@@ -79,7 +79,6 @@ class DbManger:
                         makedirs('Thumbnails')
                     with open(path, 'wb+') as f:
                         f.write(row[8])
-                        f.close()
             LOGGER.info("Users data has been imported from Database")
         # Rss Data
         self.cur.execute("SELECT * FROM rss")
