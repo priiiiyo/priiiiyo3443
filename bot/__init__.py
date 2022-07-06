@@ -1,4 +1,5 @@
-from logging import getLogger, FileHandler, StreamHandler, INFO, basicConfig, warning, error as log_error, info as log_info, warning as log_warning
+import logging
+from logging import getLogger, FileHandler, StreamHandler, INFO, basicConfig, error as log_error, info as log_info, warning as log_warning
 from socket import setdefaulttimeout
 from faulthandler import enable as faulthandler_enable
 from telegram.ext import Updater as tgUpdater
