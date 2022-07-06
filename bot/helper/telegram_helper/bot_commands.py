@@ -16,7 +16,9 @@ class _BotCommands:
         self.AuthorizeCommand = f'authorize{CMD_INDEX}'
         self.UnAuthorizeCommand = f'unauthorize{CMD_INDEX}'
         self.AddSudoCommand = f'addsudo{CMD_INDEX}'
-        self.RmSudoCommand = f'rmsudo{CMD_INDEX}'
+        self.RmSudoCommand = f'rmsudo{CMD_INDEX}'.
+        self.AddModCommand = f'addmod{CMD_INDEX}'
+        self.RmModCommand = f'rmmod{CMD_INDEX}'
         self.PingCommand = f'ping{CMD_INDEX}'
         self.RestartCommand = f'restart{CMD_INDEX}'
         self.StatsCommand = f'stats{CMD_INDEX}'
