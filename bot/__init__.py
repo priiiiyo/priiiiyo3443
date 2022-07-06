@@ -637,14 +637,14 @@ try:
     COMBOT_CAS_ANTISPAM = getConfig('COMBOT_CAS_ANTISPAM').lower() == 'true'
     log_info('Using COMBOT_CAS_ANTISPAM')
 except KeyError:
-    logging.info('No using COMBOT_CAS_ANTISPAM')
+    log_info('No using COMBOT_CAS_ANTISPAM')
     COMBOT_CAS_ANTISPAM = None
 
 try:
     INTELLIVOID_ANTISPAM = getConfig('INTELLIVOID_ANTISPAM').lower() == 'true'
     log_info('Using INTELLIVOID_ANTISPAM')
 except KeyError:
-    logging.info('No using INTELLIVOID_ANTISPAM')
+    log_info('No using INTELLIVOID_ANTISPAM')
     INTELLIVOID_ANTISPAM = None
 
 updater = tgUpdater(token=BOT_TOKEN, request_kwargs={'read_timeout': 20, 'connect_timeout': 15})
