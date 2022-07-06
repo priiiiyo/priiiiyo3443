@@ -414,11 +414,17 @@ removesudo_handler = CommandHandler(command=BotCommands.RmSudoCommand, callback=
                                     filters=CustomFilters.owner_filter, run_async=True)
 addmod_handler = CommandHandler(command=BotCommands.AddModCommand, callback=addMod,
                                     filters=CustomFilters.owner_filter, run_async=True)
-removesudo_handler = CommandHandler(command=BotCommands.RmModCommand, callback=removeMod,
+removemod_handler = CommandHandler(command=BotCommands.RmModCommand, callback=removeMod,
                                     filters=CustomFilters.owner_filter, run_async=True)
 
+dispatcher.add_handler(addleechlog_handler)
+dispatcher.add_handler(rmleechlog_handler)
+dispatcher.add_handler(addleechlog_alt_handler)
+dispatcher.add_handler(rmleechlog_alt_handler)
 dispatcher.add_handler(send_auth_handler)
 dispatcher.add_handler(authorize_handler)
 dispatcher.add_handler(unauthorize_handler)
 dispatcher.add_handler(addsudo_handler)
 dispatcher.add_handler(removesudo_handler)
+dispatcher.add_handler(addmod_handler)
+dispatcher.add_handler(removemod_handler)
