@@ -2,7 +2,6 @@ from time import sleep, time
 from telegram import InlineKeyboardMarkup
 from telegram.message import Message
 from pyrogram import enums
-from telegram.update import FloodWait
 
 from telegram.error import RetryAfter
 from pyrogram.errors import FloodWait
