@@ -1,7 +1,7 @@
 from os import path as ospath, makedirs
 from psycopg2 import DatabaseError, connect
 
-from bot import AS_DOC_USERS, AS_MEDIA_USERS, AUTHORIZED_CHATS, DB_URI, LEECH_LOG, LEECH_LOG_ALT, LOGGER, SUDO_USERS, MOD_USERS, botname, rss_dict
+from bot import AS_DOC_USERS, AS_MEDIA_USERS, AUTHORIZED_CHATS, DB_URI, LEECH_LOG, LEECH_LOG_ALT, LOGGER, SUDO_USERS, botname, rss_dict
 
 
 class DbManger:
