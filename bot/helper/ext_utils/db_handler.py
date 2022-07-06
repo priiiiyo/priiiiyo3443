@@ -1,6 +1,4 @@
-from os import makedirs
-from os import path as ospath
-
+from os import path as ospath, makedirs
 from psycopg2 import DatabaseError, connect
 
 from bot import AS_DOC_USERS, AS_MEDIA_USERS, AUTHORIZED_CHATS, DB_URI, LEECH_LOG, LEECH_LOG_ALT, LOGGER, MOD_USERS, SUDO_USERS, botname, rss_dict
@@ -87,9 +85,9 @@ class DbManger:
                     LEECH_LOG_ALT.add(row[0])
                 path = f"Thumbnails/{row[0]}.jpg"
                 if row[8] is not None and not ospath.exists(path):
-                    if not ospath.exists("Thumbnails"):
-                        makedirs("Thumbnails")
-                    with open(path, "wb+") as f:
+                    if not ospath.exists('Thumbnails'):
+                        makedirs('Thumbnails')
+                    with open(path, 'wb+') as f:
                         f.write(row[8])
             LOGGER.info("Users data has been imported from Database")
         # Rss Data
