@@ -73,8 +73,8 @@ class DbManger:
                     LEECH_LOG_ALT.add(row[0])
                 path = f"Thumbnails/{row[0]}.jpg"
                 if row[7] is not None and not ospath.exists(path):
-                    if not ospath.exists('Thumbnails'):
-                        makedirs('Thumbnails')
+                    if not ospath.exists("Thumbnails"):
+                        makedirs("Thumbnails")
                     with open(path, "wb+") as f:
                         f.write(row[7])
             LOGGER.info("Users data has been imported from Database")
