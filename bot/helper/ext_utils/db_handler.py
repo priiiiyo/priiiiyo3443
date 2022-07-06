@@ -1,7 +1,8 @@
 from os import path as ospath, makedirs
-from psycopg2 import connect, DatabaseError
+from psycopg2 import DatabaseError, connect
 
-from bot import DB_URI, AUTHORIZED_CHATS, SUDO_USERS, AS_DOC_USERS, AS_MEDIA_USERS, rss_dict, LOGGER, botname
+from bot import AS_DOC_USERS, AS_MEDIA_USERS, AUTHORIZED_CHATS, DB_URI, LEECH_LOG, LEECH_LOG_ALT, LOGGER, SUDO_USERS, MOD_USERS, botname, rss_dict
+
 
 class DbManger:
     def __init__(self):
@@ -26,10 +27,13 @@ class DbManger:
         sql = """CREATE TABLE IF NOT EXISTS users (
                  uid bigint,
                  sudo boolean DEFAULT FALSE,
+                 mod boolean DEFAULT FALSE,
                  auth boolean DEFAULT FALSE,
                  media boolean DEFAULT FALSE,
                  doc boolean DEFAULT FALSE,
-                 thumb bytea DEFAULT NULL
+                 thumb bytea DEFAULT NULL,
+                 leechlog boolean DEFAULT FALSE,
+                 leechlog_alt boolean DEFAULT FALSE
               )
               """
         self.cur.execute(sql)
@@ -43,6 +47,8 @@ class DbManger:
               """
         self.cur.execute(sql)
         self.cur.execute("CREATE TABLE IF NOT EXISTS {} (cid bigint, link text, tag text)".format(botname))
+        self.cur.execute(sql)
+        self.cur.execute("CREATE TABLE IF NOT EXISTS {} (cid bigint, link text, tag text)".format(botname))      
         self.conn.commit()
         LOGGER.info("Database Initiated")
         self.db_load()
@@ -61,12 +67,16 @@ class DbManger:
                     AS_MEDIA_USERS.add(row[0])
                 elif row[4]:
                     AS_DOC_USERS.add(row[0])
+                if row[5] and row[0] not in LEECH_LOG:
+                    LEECH_LOG.add(row[0])
+                elif row[6] and row[0] not in LEECH_LOG_ALT:
+                    LEECH_LOG_ALT.add(row[0])
                 path = f"Thumbnails/{row[0]}.jpg"
-                if row[5] is not None and not ospath.exists(path):
+                if row[7] is not None and not ospath.exists(path):
                     if not ospath.exists('Thumbnails'):
                         makedirs('Thumbnails')
                     with open(path, 'wb+') as f:
-                        f.write(row[5])
+                        f.write(row[7])
             LOGGER.info("Users data has been imported from Database")
         # Rss Data
         self.cur.execute("SELECT * FROM rss")
@@ -93,7 +103,7 @@ class DbManger:
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
-        return 'Authorized successfully'
+        return '𝗖𝗵𝗮𝘁 𝐀𝐮𝐭𝐡𝐫𝐨𝐫𝐢𝐳𝐞𝐝 ✅'
 
     def user_unauth(self, chat_id: int):
         if self.err:
@@ -103,7 +113,52 @@ class DbManger:
             self.cur.execute(sql)
             self.conn.commit()
             self.disconnect()
-            return 'Unauthorized successfully'
+            return '𝗖𝗵𝗮𝘁 𝐔𝐧𝐚𝐮𝐭𝐡𝐨𝐫𝐢𝐳𝐞𝐝 😁'
+
+    def addleech_log(self, chat_id: int):
+        if self.err:
+            return "Error in DB connection, check log for details"
+        elif not self.user_check(chat_id):
+            sql = 'INSERT INTO users (uid, leechlog) VALUES ({}, TRUE)'.format(chat_id)
+        else:
+            sql = 'UPDATE users SET leechlog = TRUE WHERE uid = {}'.format(chat_id)
+        self.cur.execute(sql)
+        self.conn.commit()
+        self.disconnect()
+        return '𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗮𝗱𝗱𝗲𝗱 𝘁𝗼 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 ✅'
+
+    def rmleech_log(self, chat_id: int):
+        if self.err:
+            return "Error in DB connection, check log for details"
+        elif self.user_check(chat_id):
+            sql = 'UPDATE users SET leechlog = FALSE WHERE uid = {}'.format(chat_id)
+            self.cur.execute(sql)
+            self.conn.commit()
+            self.disconnect()
+            return '𝗥𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 𝘀𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 😁'
+
+    # For alt Leech log
+    def addleech_log_alt(self, chat_id: int):
+        if self.err:
+            return "Error in DB connection, check log for details"
+        elif not self.user_check(chat_id):
+            sql = 'INSERT INTO users (uid, leechlog_alt) VALUES ({}, TRUE)'.format(chat_id)
+        else:
+            sql = 'UPDATE users SET leechlog_alt = TRUE WHERE uid = {}'.format(chat_id)
+        self.cur.execute(sql)
+        self.conn.commit()
+        self.disconnect()
+        return '𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗮𝗱𝗱𝗲𝗱 𝘁𝗼 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 😁'
+
+    def rmleech_log_alt(self, chat_id: int):
+        if self.err:
+            return "Error in DB connection, check log for details"
+        elif self.user_check(chat_id):
+            sql = 'UPDATE users SET leechlog_alt = FALSE WHERE uid = {}'.format(chat_id)
+            self.cur.execute(sql)
+            self.conn.commit()
+            self.disconnect()
+            return '𝗥𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 𝘀𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 😁'
 
     def user_addsudo(self, user_id: int):
         if self.err:
@@ -115,7 +170,7 @@ class DbManger:
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
-        return 'Successfully Promoted as Sudo'
+        return '𝐔𝐬𝐞𝐫 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗣𝗿𝗼𝗺𝗼𝘁𝗲𝗱 𝗮𝘀 𝗦𝘂𝗱𝗼 ✅'
 
     def user_rmsudo(self, user_id: int):
         if self.err:
@@ -125,7 +180,29 @@ class DbManger:
             self.cur.execute(sql)
             self.conn.commit()
             self.disconnect()
-            return 'Successfully removed from Sudo'
+            return '𝐔𝐬𝐞𝐫 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗿𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗦𝘂𝗱𝗼 😁'
+
+    def user_addmod(self, user_id: int):
+        if self.err:
+            return "Error in DB connection, check log for details"
+        elif not self.user_check(user_id):
+            sql = 'INSERT INTO users (uid, mod) VALUES ({}, TRUE)'.format(user_id)
+        else:
+            sql = 'UPDATE users SET mod = TRUE WHERE uid = {}'.format(user_id)
+        self.cur.execute(sql)
+        self.conn.commit()
+        self.disconnect()
+        return 'Successfully Promoted as Mod'
+
+    def user_rmmod(self, user_id: int):
+        if self.err:
+            return "Error in DB connection, check log for details"
+        elif self.user_check(user_id):
+            sql = 'UPDATE users SET mod = FALSE WHERE uid = {}'.format(user_id)
+            self.cur.execute(sql)
+            self.conn.commit()
+            self.disconnect()
+            return 'Successfully removed from Mod'
 
     def user_media(self, user_id: int):
         if self.err:
@@ -234,8 +311,7 @@ class DbManger:
         self.cur.execute("TRUNCATE TABLE {}".format(botname))
         self.conn.commit()
         self.disconnect()
-        return notifier_dict # return a dict ==> {cid: {tag: [mid, mid, ...]}}
-
+        return notifier_dict  # return a dict ==> {cid: {tag: [mid, mid, ...]}}
 
     def trunc_table(self, name):
         if self.err:
@@ -243,6 +319,7 @@ class DbManger:
         self.cur.execute("TRUNCATE TABLE {}".format(name))
         self.conn.commit()
         self.disconnect()
+
 
 if DB_URI is not None:
     DbManger().db_init()
