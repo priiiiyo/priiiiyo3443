@@ -56,29 +56,27 @@ class DbManger:
     def db_load(self):
         # User Data
         self.cur.execute("SELECT * from users")
-        rows = self.cur.fetchall()  # return a list ==> (uid, sudo, mod, auth, media, doc, thumb)
+        rows = self.cur.fetchall()  # return a list ==> (uid, sudo, auth, media, doc, thumb)
         if rows:
             for row in rows:
                 if row[1] and row[0] not in SUDO_USERS:
                     SUDO_USERS.add(row[0])
-                elif row[2] and row[0] not in MOD_USERS:
-                    MOD_USERS.add(row[0])
-                if row[3] and row[0] not in AUTHORIZED_CHATS:
+                elif row[2] and row[0] not in AUTHORIZED_CHATS:
                     AUTHORIZED_CHATS.add(row[0])
-                elif row[4]:
+                if row[3]:
                     AS_MEDIA_USERS.add(row[0])
-                if row[5]:
+                elif row[4]:
                     AS_DOC_USERS.add(row[0])
-                elif row[6] and row[0] not in LEECH_LOG:
+                if row[5] and row[0] not in LEECH_LOG:
                     LEECH_LOG.add(row[0])
-                if row[7] and row[0] not in LEECH_LOG_ALT:
+                elif row[6] and row[0] not in LEECH_LOG_ALT:
                     LEECH_LOG_ALT.add(row[0])
                 path = f"Thumbnails/{row[0]}.jpg"
-                if row[8] is not None and not ospath.exists(path):
+                if row[7] is not None and not ospath.exists(path):
                     if not ospath.exists('Thumbnails'):
                         makedirs('Thumbnails')
                     with open(path, 'wb+') as f:
-                        f.write(row[8])
+                        f.write(row[7])
             LOGGER.info("Users data has been imported from Database")
         # Rss Data
         self.cur.execute("SELECT * FROM rss")
@@ -183,28 +181,6 @@ class DbManger:
             self.conn.commit()
             self.disconnect()
             return '𝐔𝐬𝐞𝐫 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗿𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗦𝘂𝗱𝗼 😁'
-
-    def user_addmod(self, user_id: int):
-        if self.err:
-            return "Error in DB connection, check log for details"
-        elif not self.user_check(user_id):
-            sql = 'INSERT INTO users (uid, mod) VALUES ({}, TRUE)'.format(user_id)
-        else:
-            sql = 'UPDATE users SET mod = TRUE WHERE uid = {}'.format(user_id)
-        self.cur.execute(sql)
-        self.conn.commit()
-        self.disconnect()
-        return 'Successfully Promoted as Mod'
-
-    def user_rmmod(self, user_id: int):
-        if self.err:
-            return "Error in DB connection, check log for details"
-        elif self.user_check(user_id):
-            sql = 'UPDATE users SET mod = FALSE WHERE uid = {}'.format(user_id)
-            self.cur.execute(sql)
-            self.conn.commit()
-            self.disconnect()
-            return 'Successfully removed from Mod'
 
     def user_media(self, user_id: int):
         if self.err:
