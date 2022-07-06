@@ -75,7 +75,7 @@ class DbManger:
                 if row[7] is not None and not ospath.exists(path):
                     if not ospath.exists('Thumbnails'):
                         makedirs('Thumbnails')
-                    with open(path, 'wb') as f:
+                    with open(path, "wb+") as f:
                         f.write(row[7])
             LOGGER.info("Users data has been imported from Database")
         # Rss Data
