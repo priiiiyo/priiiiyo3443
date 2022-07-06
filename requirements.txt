@@ -1,3 +1,4 @@
+aiohttp
 anytree
 appdirs
 aria2p
@@ -8,10 +9,12 @@ bencoding
 cfscrape
 feedparser
 flask
+gc-python-utils
 google-api-python-client
 google-auth-httplib2
 google-auth-oauthlib
 gunicorn
+heroku3
 lk21
 lxml
 pillow
@@ -22,10 +25,15 @@ pyrogram
 python-dotenv
 python-magic
 python-telegram-bot
+pyshorteners
 qbittorrent-api
 requests
+speedtest-cli
+six
 telegraph
 tenacity
 tgCrypto
 urllib3
+waybackpy
+pyshorteners
 yt-dlp
