@@ -1,7 +1,7 @@
 from os import path as ospath, makedirs
 from psycopg2 import DatabaseError, connect
 
-from bot import AS_DOC_USERS, AS_MEDIA_USERS, AUTHORIZED_CHATS, DB_URI, LEECH_LOG, LEECH_LOG_ALT, LOGGER, SUDO_USERS, botname, rss_dict
+from bot import AS_DOC_USERS, AS_MEDIA_USERS, AUTHORIZED_CHATS, DB_URI, LEECH_LOG, LEECH_LOG_ALT, LOGGER, SUDO_USERS, MOD_USERS, botname, rss_dict
 
 
 class DbManger:
@@ -75,7 +75,7 @@ class DbManger:
                 if row[7] is not None and not ospath.exists(path):
                     if not ospath.exists('Thumbnails'):
                         makedirs('Thumbnails')
-                    with open(path, 'wb+') as f:
+                    with open(path, 'wb') as f:
                         f.write(row[7])
             LOGGER.info("Users data has been imported from Database")
         # Rss Data
@@ -181,6 +181,28 @@ class DbManger:
             self.conn.commit()
             self.disconnect()
             return '𝐔𝐬𝐞𝐫 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗿𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗦𝘂𝗱𝗼 😁'
+
+    def user_addmod(self, user_id: int):
+        if self.err:
+            return "Error in DB connection, check log for details"
+        elif not self.user_check(user_id):
+            sql = 'INSERT INTO users (uid, mod) VALUES ({}, TRUE)'.format(user_id)
+        else:
+            sql = 'UPDATE users SET mod = TRUE WHERE uid = {}'.format(user_id)
+        self.cur.execute(sql)
+        self.conn.commit()
+        self.disconnect()
+        return 'Successfully Promoted as Mod'
+
+    def user_rmmod(self, user_id: int):
+        if self.err:
+            return "Error in DB connection, check log for details"
+        elif self.user_check(user_id):
+            sql = 'UPDATE users SET mod = FALSE WHERE uid = {}'.format(user_id)
+            self.cur.execute(sql)
+            self.conn.commit()
+            self.disconnect()
+            return 'Successfully removed from Mod'
 
     def user_media(self, user_id: int):
         if self.err:
