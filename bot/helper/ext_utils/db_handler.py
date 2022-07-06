@@ -46,17 +46,9 @@ class DbManger:
               )
               """
         self.cur.execute(sql)
-        self.cur.execute(
-            "CREATE TABLE IF NOT EXISTS {} (cid bigint, link text, tag text)".format(
-                botname
-            )
-        )
+        self.cur.execute("CREATE TABLE IF NOT EXISTS {} (cid bigint, link text, tag text)".format(botname))
         self.cur.execute(sql)
-        self.cur.execute(
-            "CREATE TABLE IF NOT EXISTS {} (cid bigint, link text, tag text)".format(
-                botname
-            )
-        )
+        self.cur.execute("CREATE TABLE IF NOT EXISTS {} (cid bigint, link text, tag text)".format(botname))      
         self.conn.commit()
         LOGGER.info("Database Initiated")
         self.db_load()
@@ -64,9 +56,7 @@ class DbManger:
     def db_load(self):
         # User Data
         self.cur.execute("SELECT * from users")
-        rows = (
-            self.cur.fetchall()
-        )  # return a list ==> (uid, sudo, mod, auth, media, doc, thumb)
+        rows = self.cur.fetchall()  # return a list ==> (uid, sudo, mod, auth, media, doc, thumb)
         if rows:
             for row in rows:
                 if row[1] and row[0] not in SUDO_USERS:
@@ -92,15 +82,14 @@ class DbManger:
             LOGGER.info("Users data has been imported from Database")
         # Rss Data
         self.cur.execute("SELECT * FROM rss")
-        # return a list ==> (name, feed_link, last_link, last_title, filters)
-        rows = self.cur.fetchall()
+        rows = self.cur.fetchall()  # return a list ==> (name, feed_link, last_link, last_title, filters)
         if rows:
             for row in rows:
                 f_lists = []
                 if row[4] is not None:
-                    filters_list = row[4].split("|")
+                    filters_list = row[4].split('|')
                     for x in filters_list:
-                        y = x.split(" or ")
+                        y = x.split(' or ')
                         f_lists.append(y)
                 rss_dict[row[0]] = [row[1], row[2], row[3], f_lists]
             LOGGER.info("Rss data has been imported from Database.")
@@ -110,124 +99,120 @@ class DbManger:
         if self.err:
             return "Error in DB connection, check log for details"
         elif not self.user_check(chat_id):
-            sql = "INSERT INTO users (uid, auth) VALUES ({}, TRUE)".format(chat_id)
+            sql = 'INSERT INTO users (uid, auth) VALUES ({}, TRUE)'.format(chat_id)
         else:
-            sql = "UPDATE users SET auth = TRUE WHERE uid = {}".format(chat_id)
+            sql = 'UPDATE users SET auth = TRUE WHERE uid = {}'.format(chat_id)
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
-        return "𝗖𝗵𝗮𝘁 𝐀𝐮𝐭𝐡𝐫𝐨𝐫𝐢𝐳𝐞𝐝 ✅"
+        return '𝗖𝗵𝗮𝘁 𝐀𝐮𝐭𝐡𝐫𝐨𝐫𝐢𝐳𝐞𝐝 ✅'
 
     def user_unauth(self, chat_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif self.user_check(chat_id):
-            sql = "UPDATE users SET auth = FALSE WHERE uid = {}".format(chat_id)
+            sql = 'UPDATE users SET auth = FALSE WHERE uid = {}'.format(chat_id)
             self.cur.execute(sql)
             self.conn.commit()
             self.disconnect()
-            return "𝗖𝗵𝗮𝘁 𝐔𝐧𝐚𝐮𝐭𝐡𝐨𝐫𝐢𝐳𝐞𝐝 😁"
+            return '𝗖𝗵𝗮𝘁 𝐔𝐧𝐚𝐮𝐭𝐡𝐨𝐫𝐢𝐳𝐞𝐝 😁'
 
     def addleech_log(self, chat_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif not self.user_check(chat_id):
-            sql = "INSERT INTO users (uid, leechlog) VALUES ({}, TRUE)".format(chat_id)
+            sql = 'INSERT INTO users (uid, leechlog) VALUES ({}, TRUE)'.format(chat_id)
         else:
-            sql = "UPDATE users SET leechlog = TRUE WHERE uid = {}".format(chat_id)
+            sql = 'UPDATE users SET leechlog = TRUE WHERE uid = {}'.format(chat_id)
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
-        return "𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗮𝗱𝗱𝗲𝗱 𝘁𝗼 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 ✅"
+        return '𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗮𝗱𝗱𝗲𝗱 𝘁𝗼 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 ✅'
 
     def rmleech_log(self, chat_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif self.user_check(chat_id):
-            sql = "UPDATE users SET leechlog = FALSE WHERE uid = {}".format(chat_id)
+            sql = 'UPDATE users SET leechlog = FALSE WHERE uid = {}'.format(chat_id)
             self.cur.execute(sql)
             self.conn.commit()
             self.disconnect()
-            return "𝗥𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 𝘀𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 😁"
+            return '𝗥𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 𝘀𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 😁'
 
     # For alt Leech log
     def addleech_log_alt(self, chat_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif not self.user_check(chat_id):
-            sql = "INSERT INTO users (uid, leechlog_alt) VALUES ({}, TRUE)".format(
-                chat_id
-            )
+            sql = 'INSERT INTO users (uid, leechlog_alt) VALUES ({}, TRUE)'.format(chat_id)
         else:
-            sql = "UPDATE users SET leechlog_alt = TRUE WHERE uid = {}".format(chat_id)
+            sql = 'UPDATE users SET leechlog_alt = TRUE WHERE uid = {}'.format(chat_id)
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
-        return "𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗮𝗱𝗱𝗲𝗱 𝘁𝗼 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 😁"
+        return '𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗮𝗱𝗱𝗲𝗱 𝘁𝗼 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 😁'
 
     def rmleech_log_alt(self, chat_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif self.user_check(chat_id):
-            sql = "UPDATE users SET leechlog_alt = FALSE WHERE uid = {}".format(chat_id)
+            sql = 'UPDATE users SET leechlog_alt = FALSE WHERE uid = {}'.format(chat_id)
             self.cur.execute(sql)
             self.conn.commit()
             self.disconnect()
-            return "𝗥𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 𝘀𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 😁"
+            return '𝗥𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗹𝗲𝗲𝗰𝗵 𝗹𝗼𝗴𝘀 𝘀𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 😁'
 
     def user_addsudo(self, user_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif not self.user_check(user_id):
-            sql = "INSERT INTO users (uid, sudo) VALUES ({}, TRUE)".format(user_id)
+            sql = 'INSERT INTO users (uid, sudo) VALUES ({}, TRUE)'.format(user_id)
         else:
-            sql = "UPDATE users SET sudo = TRUE WHERE uid = {}".format(user_id)
+            sql = 'UPDATE users SET sudo = TRUE WHERE uid = {}'.format(user_id)
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
-        return "𝐔𝐬𝐞𝐫 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗣𝗿𝗼𝗺𝗼𝘁𝗲𝗱 𝗮𝘀 𝗦𝘂𝗱𝗼 ✅"
+        return '𝐔𝐬𝐞𝐫 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗣𝗿𝗼𝗺𝗼𝘁𝗲𝗱 𝗮𝘀 𝗦𝘂𝗱𝗼 ✅'
 
     def user_rmsudo(self, user_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif self.user_check(user_id):
-            sql = "UPDATE users SET sudo = FALSE WHERE uid = {}".format(user_id)
+            sql = 'UPDATE users SET sudo = FALSE WHERE uid = {}'.format(user_id)
             self.cur.execute(sql)
             self.conn.commit()
             self.disconnect()
-            return "𝐔𝐬𝐞𝐫 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗿𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗦𝘂𝗱𝗼 😁"
+            return '𝐔𝐬𝐞𝐫 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗿𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗦𝘂𝗱𝗼 😁'
 
     def user_addmod(self, user_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif not self.user_check(user_id):
-            sql = "INSERT INTO users (uid, mod) VALUES ({}, TRUE)".format(user_id)
+            sql = 'INSERT INTO users (uid, mod) VALUES ({}, TRUE)'.format(user_id)
         else:
-            sql = "UPDATE users SET mod = TRUE WHERE uid = {}".format(user_id)
+            sql = 'UPDATE users SET mod = TRUE WHERE uid = {}'.format(user_id)
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
-        return "Successfully Promoted as Mod"
+        return 'Successfully Promoted as Mod'
 
     def user_rmmod(self, user_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif self.user_check(user_id):
-            sql = "UPDATE users SET mod = FALSE WHERE uid = {}".format(user_id)
+            sql = 'UPDATE users SET mod = FALSE WHERE uid = {}'.format(user_id)
             self.cur.execute(sql)
             self.conn.commit()
             self.disconnect()
-            return "Successfully removed from Mod"
+            return 'Successfully removed from Mod'
 
     def user_media(self, user_id: int):
         if self.err:
             return
         elif not self.user_check(user_id):
-            sql = "INSERT INTO users (uid, media) VALUES ({}, TRUE)".format(user_id)
+            sql = 'INSERT INTO users (uid, media) VALUES ({}, TRUE)'.format(user_id)
         else:
-            sql = "UPDATE users SET media = TRUE, doc = FALSE WHERE uid = {}".format(
-                user_id
-            )
+            sql = 'UPDATE users SET media = TRUE, doc = FALSE WHERE uid = {}'.format(user_id)
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
@@ -236,11 +221,9 @@ class DbManger:
         if self.err:
             return
         elif not self.user_check(user_id):
-            sql = "INSERT INTO users (uid, doc) VALUES ({}, TRUE)".format(user_id)
+            sql = 'INSERT INTO users (uid, doc) VALUES ({}, TRUE)'.format(user_id)
         else:
-            sql = "UPDATE users SET media = FALSE, doc = TRUE WHERE uid = {}".format(
-                user_id
-            )
+            sql = 'UPDATE users SET media = FALSE, doc = TRUE WHERE uid = {}'.format(user_id)
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
@@ -248,12 +231,12 @@ class DbManger:
     def user_save_thumb(self, user_id: int, path):
         if self.err:
             return
-        image = open(path, "rb+")
+        image = open(path, 'rb+')
         image_bin = image.read()
         if not self.user_check(user_id):
-            sql = "INSERT INTO users (thumb, uid) VALUES (%s, %s)"
+            sql = 'INSERT INTO users (thumb, uid) VALUES (%s, %s)'
         else:
-            sql = "UPDATE users SET thumb = %s WHERE uid = %s"
+            sql = 'UPDATE users SET thumb = %s WHERE uid = %s'
         self.cur.execute(sql, (image_bin, user_id))
         self.conn.commit()
         self.disconnect()
@@ -262,7 +245,7 @@ class DbManger:
         if self.err:
             return
         elif self.user_check(user_id):
-            sql = "UPDATE users SET thumb = NULL WHERE uid = {}".format(user_id)
+            sql = 'UPDATE users SET thumb = NULL WHERE uid = {}'.format(user_id)
         self.cur.execute(sql)
         self.conn.commit()
         self.disconnect()
@@ -276,10 +259,7 @@ class DbManger:
         if self.err:
             return
         q = (name, link, last, title, filters)
-        self.cur.execute(
-            "INSERT INTO rss (name, link, last, title, filters) VALUES (%s, %s, %s, %s, %s)",
-            q,
-        )
+        self.cur.execute("INSERT INTO rss (name, link, last, title, filters) VALUES (%s, %s, %s, %s, %s)", q)
         self.conn.commit()
         self.disconnect()
 
@@ -302,9 +282,7 @@ class DbManger:
         if self.err:
             return
         q = (cid, link, tag)
-        self.cur.execute(
-            "INSERT INTO {} (cid, link, tag) VALUES (%s, %s, %s)".format(botname), q
-        )
+        self.cur.execute("INSERT INTO {} (cid, link, tag) VALUES (%s, %s, %s)".format(botname), q)
         self.conn.commit()
         self.disconnect()
 
