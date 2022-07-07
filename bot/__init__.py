@@ -440,6 +440,12 @@ try:
 except KeyError:
     SEARCH_VIEW_BUTTON = ""
 try:
+    SOURCE_LINK = getConfig("SOURCE_LINK")
+    if len(SOURCE_LINK) == 0:
+        raise KeyError
+except KeyError:
+    SOURCE_LINK = ""
+try:
     TITLE_NAME = getConfig("TITLE_NAME")
     if len(TITLE_NAME) == 0:
         raise KeyError
