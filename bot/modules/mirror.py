@@ -396,16 +396,16 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
             pass
     if isLeech and length_of_leechlog == 0:
         try:
-            text = 'Error: Leech Functionality will not work\nReason: Your Leech Log var is empty.\n\nRead the README file it's there for a reason.'
+            text = 'Error: Leech Functionality will not work\nReason: Your Leech Log var is empty\n\nRead the README.md file for a reason'
             msg = sendMessage(text, bot, message)
-            LOGGER.error('Leech Log var is Empty\nKindly add Chat id in Leech log to use Leech Functionality\nRead the README file it's there for a reason\n')  
+            LOGGER.error('Leech Log var is Empty\nKindly add Chat id in Leech log to use Leech Functionality\nRead the README.md file for a reason\n')  
             Thread(target=auto_delete_message, args=(bot, message, msg)).start()
             return
         except Exception as err:
             LOGGER.error(f'Uff We got Some Error:\n{err}')
-    if BOT_PM and message.chat.type != "private":
+    if BOT_PM and message.chat.type != 'private':
         try:
-            msg1 = f"𝗔𝗱𝗱𝗲𝗱 𝘆𝗼𝘂𝗿 𝗥𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗹𝗶𝗻𝗸 𝘁𝗼 𝗰𝗹𝗼𝗻𝗲\n"
+            msg1 = f'𝗔𝗱𝗱𝗲𝗱 𝘆𝗼𝘂𝗿 𝗥𝗲𝗾𝘂𝗲𝘀𝘁𝗲𝗱 𝗹𝗶𝗻𝗸 𝘁𝗼 𝗰𝗹𝗼𝗻𝗲\n'
             send = bot.sendMessage(message.from_user.id, text=msg1)
             send.delete()
         except Exception as e:
@@ -445,7 +445,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
     else:
         name = ''
 
-    link = re_split(r"pswd:|\|", link)[0]
+    link = re_split(r'pswd:|\|', link)[0]
     link = link.strip()
 
     pswd_arg = mesg[0].split(' pswd: ')
@@ -453,7 +453,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
         pswd = pswd_arg[1]
 
     if message.from_user.username:
-        tag = f"@{message.from_user.username}"
+        tag = f'@{message.from_user.username}'
     else:
         tag = message.from_user.mention_html(message.from_user.first_name)
 
@@ -468,7 +468,7 @@ def _mirror(bot, message, isZip=False, extract=False, isQbit=False, isLeech=Fals
 
         if not reply_to.from_user.is_bot:
             if reply_to.from_user.username:
-                tag = f"@{reply_to.from_user.username}"
+                tag = f'@{reply_to.from_user.username}'
             else:
                 tag = reply_to.from_user.mention_html(reply_to.from_user.first_name)
 
