@@ -236,6 +236,12 @@ try:
 except:
     DB_URI = None
 try:
+    EXTENSION_FILTER = getConfig("EXTENSION_FILTER")
+    if len(EXTENSION_FILTER) == 0:
+        raise KeyError
+except BaseException:
+    EXTENSION_FILTER = None
+try:
     TG_SPLIT_SIZE = getConfig('TG_SPLIT_SIZE')
     if len(TG_SPLIT_SIZE) == 0 or int(TG_SPLIT_SIZE) > 2097151000:
         raise KeyError
