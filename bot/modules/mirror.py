@@ -276,7 +276,7 @@ class MirrorListener:
                             sleep(1.5)
                             bot.sendMessage(chat_id=i, text=msg + indexmsg, reply_markup=InlineKeyboardMarkup(buttons.build_menu(2)), parse_mode=ParseMode.HTML)
                             indexmsg = ''
-                     if indexmsg != '':
+                    if indexmsg != '':
                         sleep(1.5)
                         bot.sendMessage(chat_id=i, text=msg + indexmsg, reply_markup=InlineKeyboardMarkup(buttons.build_menu(2)), parse_mode=ParseMode.HTML)
             else:
