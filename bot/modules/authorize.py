@@ -394,13 +394,13 @@ def sendAuthChats(update, context):
     sendMessage(f'<b><u>𝗔𝘂𝘁𝗵𝗼𝗿𝗶𝘇𝗲𝗱 𝗖𝗵𝗮𝘁𝘀:</u></b>{user}\n<b><u>𝗦𝘂𝗱𝗼 𝗨𝘀𝗲𝗿𝘀:</u></b>\n{sudo}', context.bot, update.message)
 
 
-addleechlog_handler = CommandHandler(command=BotCommands.AddleechlogCommand, callback=addleechlog,
+addleechlog_handler = CommandHandler(command=BotCommands.AddLeechLogCommand, callback=addleechlog,
                        filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
-rmleechlog_handler = CommandHandler(command=BotCommands.RmleechlogCommand, callback=rmleechlog,
+rmleechlog_handler = CommandHandler(command=BotCommands.RmLeechLogCommand, callback=rmleechlog,
                       filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
-addleechlog_alt_handler = CommandHandler(command=BotCommands.AddleechlogaltCommand, callback=addleechlog_alt,
+addleechlog_alt_handler = CommandHandler(command=BotCommands.AddLeechLogAltCommand, callback=addleechlog_alt,
                            filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
-rmleechlog_alt_handler = CommandHandler(command=BotCommands.RmleechlogaltCommand, callback=rmleechlog_alt,
+rmleechlog_alt_handler = CommandHandler(command=BotCommands.RmLeechLogAltCommand, callback=rmleechlog_alt,
                           filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
 send_auth_handler = CommandHandler(command=BotCommands.AuthorizedUsersCommand, callback=sendAuthChats,
                                     filters=CustomFilters.owner_filter | CustomFilters.sudo_user, run_async=True)
