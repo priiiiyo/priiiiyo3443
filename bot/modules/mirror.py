@@ -311,7 +311,8 @@ class MirrorListener:
                         buttons.buildbutton(f"{VIEW_BUTTON}", share_urls)
                 if SOURCE_LINK is not None:
                     buttons.buildbutton(f"{SOURCE_LINK}", link)
-                if MIRROR_LOGS:
+            if MIRROR_LOGS:
+                try:
                     for i in MIRROR_LOGS:
                         bot.sendMessage(chat_id=i, text=msg, reply_markup=InlineKeyboardMarkup(buttons.build_menu(2)), parse_mode=ParseMode.HTML)
                 except Exception as e:
