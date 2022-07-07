@@ -184,7 +184,7 @@ class DbManger:
             self.disconnect()
             return '𝐔𝐬𝐞𝐫 𝗦𝘂𝗰𝗰𝗲𝘀𝘀𝗳𝘂𝗹𝗹𝘆 𝗿𝗲𝗺𝗼𝘃𝗲𝗱 𝗳𝗿𝗼𝗺 𝗦𝘂𝗱𝗼 😁'
 
-def user_addmod(self, user_id: int):
+    def user_addmod(self, user_id: int):
         if self.err:
             return "Error in DB connection, check log for details"
         elif not self.user_check(user_id):
