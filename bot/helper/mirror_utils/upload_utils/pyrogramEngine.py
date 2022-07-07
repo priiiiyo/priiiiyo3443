@@ -168,9 +168,7 @@ class TgUploader:
                                 try:
                                     msg.reply_photo(chat_id=i, photo=self.__sent_msg.photo.file_id, quote=True, caption=cap_mono)
                                 except Exception as err:
-                                    LOGGER.error(f"Failed To Send Image in Alt Leech Log:\n{err}")
-                        except Exception as err:
-                            LOGGER.warning(f"Image Leech is Blocked by Owner:\n{err}")
+                                    LOGGER.error(f"Failed To Send Image in Alt Leech Log:\n{err}")       
                     else:
                         LOGGER.warning(f"Image Leech is Blocked by Owner")
                 else:
