@@ -231,25 +231,25 @@ class MirrorListener:
                     reply_to.delete()
                 except Exception as error:
                     LOGGER.warning(error)
-            if self.message.chat.type == "private":
-                warnmsg = ""
+            if self.message.chat.type == 'private':
+                warnmsg = ''
             else:
                 autodel = secondsToText()
-                warnmsg = f" \n 𝗧𝗵𝗶𝘀 𝗺𝗲𝘀𝘀𝗮𝗴𝗲 𝘄𝗶𝗹𝗹 𝗮𝘂𝘁𝗼 𝗱𝗲𝗹𝗲𝘁𝗲𝗱 𝗶𝗻 {autodel}\n\n"
+                warnmsg = f' \n 𝗧𝗵𝗶𝘀 𝗺𝗲𝘀𝘀𝗮𝗴𝗲 𝘄𝗶𝗹𝗹 𝗮𝘂𝘁𝗼 𝗱𝗲𝗹𝗲𝘁𝗲𝗱 𝗶𝗻 {autodel}\n\n'
         else:
-            warnmsg = ""
+            warnmsg = ''
         if BOT_PM and self.message.chat.type != "private":
-            pmwarn = f"𝗜 𝗵𝗮𝘃𝗲 𝘀𝗲𝗻𝘁 𝗳𝗶𝗹𝗲𝘀 𝗶𝗻 𝗣𝗠.\n"
-            pmwarn_mirror = f"𝗜 𝗵𝗮𝘃𝗲 𝘀𝗲𝗻𝘁 𝗹𝗶𝗻𝗸𝘀 𝗶𝗻 𝗣𝗠.\n"
-        elif self.message.chat.type == "private":
-            pmwarn = ""
-            pmwarn_mirror = ""
+            pmwarn = f'𝗜 𝗵𝗮𝘃𝗲 𝘀𝗲𝗻𝘁 𝗳𝗶𝗹𝗲𝘀 𝗶𝗻 𝗣𝗠.\n'
+            pmwarn_mirror = f'𝗜 𝗵𝗮𝘃𝗲 𝘀𝗲𝗻𝘁 𝗹𝗶𝗻𝗸𝘀 𝗶𝗻 𝗣𝗠.\n'
+        elif self.message.chat.type == 'private':
+            pmwarn = ''
+            pmwarn_mirror = ''
         else:
-            pmwarn = ""
-            pmwarn_mirror = ""
-        logwarn = f"𝗜 𝗵𝗮𝘃𝗲 𝘀𝗲𝗻𝘁 𝗳𝗶𝗹𝗲𝘀 𝗶𝗻 𝗟𝗼𝗴 𝗖𝗵𝗮𝗻𝗻𝗲𝗹.\n"
-        msg += f"\n╭─📂 𝐅𝐢𝐥𝐞𝐧𝐚𝐦𝐞 ⇢ <code>{escape(name)}</code>"
-        msg += f"\n├─🕹️ 𝗦𝗶𝘇𝗲 ⇢ {size}"
+            pmwarn = ''
+            pmwarn_mirror = ''
+        logwarn = f'𝗜 𝗵𝗮𝘃𝗲 𝘀𝗲𝗻𝘁 𝗳𝗶𝗹𝗲𝘀 𝗶𝗻 𝗟𝗼𝗴 𝗖𝗵𝗮𝗻𝗻𝗲𝗹.\n'
+        msg += f'\n╭─📂 𝐅𝐢𝐥𝐞𝐧𝐚𝐦𝐞 ⇢ <code>{escape(name)}</code>'
+        msg += f'\n├─🕹️ 𝗦𝗶𝘇𝗲 ⇢ {size}'
         if self.isLeech:
             msg += f'\n├─📚 𝐓𝐨𝐭𝐚𝐥 𝐅𝐢𝐥𝐞𝐬 ⇢ {folders}'
             if typ != 0:
@@ -257,7 +257,7 @@ class MirrorListener:
             msg += f'\n╰─📬 𝗟𝗲𝗲𝗰𝗵𝗲𝗱 𝐁𝐲 ⇢ {self.tag}\n\n'
             if not files:
                 sendMessage(msg, self.bot, self.message)
-            if BOT_PM and self.message.chat.type != "private":
+            if BOT_PM and self.message.chat.type != 'private':
                 try:
                     LOGGER.info(self.message.chat.type)
                     reply_markup = sendMessage(msg + pmwarn + warnmsg, self.bot, self.message)
@@ -267,16 +267,16 @@ class MirrorListener:
                     return
             if MIRROR_LOGS:
                 for i in MIRROR_LOGS:
-                    indexmsg = ""
+                    indexmsg = ''
                     for index, item in enumerate(list(files), start=1):
                         msg_id = files[item]
-                        link = f"https://t.me/c/{chat_id}/{msg_id}"
-                        indexmsg += f"{index}. <a href='{link}'>{item}</a>\n"
-                        if len(indexmsg.encode("utf-8") + msg.encode("utf-8")) > 4000:
+                        link = f'https://t.me/c/{chat_id}/{msg_id}'
+                        indexmsg += f'{index}. <a href='{link}'>{item}</a>\n'
+                        if len(indexmsg.encode('utf-8') + msg.encode('utf-8')) > 4000:
                             sleep(1.5)
                             bot.sendMessage(chat_id=i, text=msg + indexmsg, reply_markup=InlineKeyboardMarkup(buttons.build_menu(2)), parse_mode=ParseMode.HTML)
-                            indexmsg = ""
-                     if indexmsg != "":
+                            indexmsg = ''
+                     if indexmsg != '':
                         sleep(1.5)
                         bot.sendMessage(chat_id=i, text=msg + indexmsg, reply_markup=InlineKeyboardMarkup(buttons.build_menu(2)), parse_mode=ParseMode.HTML)
             else:
