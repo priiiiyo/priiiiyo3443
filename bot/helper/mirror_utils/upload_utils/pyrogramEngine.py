@@ -123,7 +123,7 @@ class TgUploader:
                                 msg.reply_video(chat_id=self.__user_id, video=self.__sent_msg.video.file_id, quote=True, caption=cap_mono)
                             except Exception as err:
                                 LOGGER.error(f"Failed To Send Video in PM:\n{err}")
-                        if LEECH_LOG_ALT:
+                    if LEECH_LOG_ALT:
                             try:
                                 for i in self.__leech_log_alt:
                                     msg.reply_video(chat_id=i, video=self.__sent_msg.video.file_id, quote=True, caption=cap_mono)
@@ -146,7 +146,7 @@ class TgUploader:
                                 msg.reply_audio(chat_id=self.__user_id, audio=self.__sent_msg.audio.file_id, quote=True, caption=cap_mono)
                             except Exception as err:
                                 LOGGER.error(f"Failed To Send Audio in PM:\n{err}")
-                        if LEECH_LOG_ALT:
+                    if LEECH_LOG_ALT:
                             try:
                                 for i in self.__leech_log_alt:
                                     msg.reply_audio(chat_id=i, audio=self.__sent_msg.audio.file_id, quote=True, caption=cap_mono)
@@ -164,7 +164,7 @@ class TgUploader:
                                     msg.reply_photo(chat_id=self.__user_id, photo=self.__sent_msg.photo.file_id, quote=True, caption=cap_mono)
                                 except Exception as err:
                                     LOGGER.error(f"Failed To Send Image in PM:\n{err}")
-                            if LEECH_LOG_ALT:
+                    if LEECH_LOG_ALT:
                                 try:
                                     msg.reply_photo(chat_id=i, photo=self.__sent_msg.photo.file_id, quote=True, caption=cap_mono)
                                 except Exception as err:
@@ -193,7 +193,7 @@ class TgUploader:
                             app.send_document(chat_id=self.__user_id, document=self.__sent_msg.document.file_id, quote=True, caption=cap_mono)
                         except Exception as err:
                             LOGGER.error(f"Failed To Send Document in PM:\n{err}")
-                    if LEECH_LOG_ALT:
+                if LEECH_LOG_ALT:
                         try:
                             for i in self.__leech_log_alt:
                                 msg.reply_document(chat_id=i, document=self.__sent_msg.document.file_id, quote=True, caption=cap_mono)
