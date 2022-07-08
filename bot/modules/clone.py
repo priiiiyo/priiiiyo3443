@@ -188,9 +188,14 @@ def _clone(message, bot, multi=0):
                     bot.sendMessage(message.from_user.id, text=result + cc, reply_markup=button, parse_mode=ParseMode.HTML)
                 except Exception as e:
                     LOGGER.warning(e)
-                return
+                    return
             sendMarkup(result + cc, bot, message, button)
             LOGGER.info(f'Cloning Done: {name}')
+        if is_gdtot:
+            gd.deletefile(link)
+        if is_appdrive:
+            gd.deletefile(link)
+        LOGGER.info(f"Cloning Done: {name}")
     else:
         sendMessage('Send Gdrive or gdtot link along with command or by replying to the link by command', bot, message)
 
