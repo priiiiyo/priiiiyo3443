@@ -180,7 +180,7 @@ def _clone(message, bot, multi=0):
             try:
                 for i in MIRROR_LOGS:
                     bot.sendMessage(chat_id=i, text=result + cc, reply_markup=button, parse_mode=ParseMode.HTML)
-            except Exception as e:
+                except Exception as e:
                 LOGGER.warning(e)
             if BOT_PM and message.chat.type != "private":
                 try:
