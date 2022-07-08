@@ -20,8 +20,7 @@ def get_report(file_hash, link = False):
     try:
         LOGGER.info("VirusTotal - Check for existing report")
         url = ""
-        if link: url = baseUrlUrl + 'report'
-        else: url = baseUrlFile + 'report'
+        url = f'{baseUrlUrl}report' if link else f'{baseUrlFile}report'
         params = {
             'apikey': apiKey,
             'resource': file_hash
@@ -50,15 +49,15 @@ def upload_file(file_path, islink = False):
     '''
     try:
         url = ""
-        if islink: url = baseUrlUrl + 'scan'
-        else: url = baseUrlFile + 'scan'
         if islink:
+            url = f'{baseUrlUrl}scan'
             params = {
                 'apikey': apiKey,
                 'url': file_path
             }
             response = requests.post(url, data=params)
         else:
+            url = f'{baseUrlFile}scan'
             if os.path.getsize(file_path) > 32*1024*1024:
                 url = 'https://www.virustotal.com/vtapi/v2/file/scan/upload_url'
                 params = {'apikey': apiKey}
@@ -74,21 +73,17 @@ def upload_file(file_path, islink = False):
         if response.status_code == 403:
             LOGGER.error("VirusTotal -  Permission denied, wrong api key?")
             return None
-        json_response = response.json()
-        return json_response
+        return response.json()
     except:
         LOGGER.error("VirusTotal -  upload_file")
         return None
 
 
 def getMD5(path):
-    f = open(path, "rb")
-    file_hash = hashlib.md5()
-    chunk = f.read(8192)
-    while chunk:
-        file_hash.update(chunk)
-        chunk = f.read(8192)
-    f.close()
+    with open(path, "rb") as f:
+        file_hash = hashlib.md5()
+        while chunk := f.read(8192):
+            file_hash.update(chunk)
     return file_hash.hexdigest()
 
 
@@ -104,7 +99,7 @@ def get_result(file_path):
     url = False
     # file
     try:
-        file = True if os.path.isfile(file_path) else False
+        file = bool(os.path.isfile(file_path))
         LOGGER.info("file was True")
     except Exception as e:
         LOGGER.error(e)
@@ -121,16 +116,14 @@ def get_result(file_path):
     if file: hash = getMD5(path=file_path)
     if not (hash and file): hash = file_path
     try:
-        report = get_report(hash, url)
-        if report:
+        if report := get_report(hash, url):
             LOGGER.info("VirusTotal -  Report found.")
             LOGGER.info(report)
             if int(report['response_code']) == 1:
                 return report
             elif file_path:
                 LOGGER.info("VirusTotal -  file upload")
-                upload_response = upload_file(file_path, url)
-                return upload_response
+                return upload_file(file_path, url)
     except Exception as e: LOGGER.error(e)
 
 
@@ -155,19 +148,19 @@ def getResultAsReadable(result):
     if validateValue(result, 'sha1'): someInfo += f"\nSHA1: <code>{result['sha1']}</code>"
     if validateValue(result, 'sha256'): someInfo += f"\nSHA256: <code>{result['sha256']}</code>"
     if validateValue(result, 'permalink'): someInfo += f"\nLink: {short_url(result['permalink'])}"
-    if validateValue(result, 'scans'):
-        pos = []
-        neg = []
-        scans = result['scans']
-        for i in scans:
-            if bool((scans[i]['detected'])): pos.append(i) 
-            else: neg.append(i)
-        tore = someInfo + "\n\nTotal: " + str(result['total'])  + \
-            " | Positives: " + str(result['positives']) + \
-            " | Negatives: " + str(len(neg))
-        if len(pos) > 0: tore += "\nDetections: <code>" + ", ".join(pos) + "</code>"
-        return tore
-    else: return someInfo
+    if not validateValue(result, 'scans'):
+        return someInfo
+    pos = []
+    neg = []
+    scans = result['scans']
+    for i in scans:
+        if bool((scans[i]['detected'])): pos.append(i) 
+        else: neg.append(i)
+    tore = someInfo + "\n\nTotal: " + str(result['total'])  + \
+        " | Positives: " + str(result['positives']) + \
+        " | Negatives: " + str(len(neg))
+    if pos: tore += "\nDetections: <code>" + ", ".join(pos) + "</code>"
+    return tore
 
 
 def humanbytes(size, byte=True):
@@ -195,20 +188,18 @@ def virustotal(update, context):
     link = None
     if message.reply_to_message:
         if message.reply_to_message.document: # file
-            maxsize = 210*1024*1024
-            if VIRUSTOTAL_FREE: maxsize = 32*1024*1024
+            maxsize = 32*1024*1024 if VIRUSTOTAL_FREE else 210*1024*1024
             if message.reply_to_message.document.file_size > maxsize:
                 return sendMessage(f"File limit is {humanbytes(maxsize)}", context.bot, update)
             try:
-                sent = sendMessage(f"Trying to download. Please wait.", context.bot, update)
+                sent = sendMessage("Trying to download. Please wait.", context.bot, update)
                 filename = os.path.join(VtPath, message.reply_to_message.document.file_name)
                 link = app.download_media(message=message.reply_to_message.document, file_name=filename)
             except Exception as e: LOGGER.error(e)
         else: link = message.reply_to_message.text
     else:
         link = message.text.split(' ', 1)
-        if len(link) != 2: link = None
-        else: link = link[1]
+        link = None if len(link) != 2 else link[1]
     if not link: editMessage(help_msg, sent)
     ret = getResultAsReadable(get_result(link))
     try: os.remove(link)

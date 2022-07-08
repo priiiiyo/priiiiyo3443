@@ -26,14 +26,12 @@ def countNode(update, context):
             tag = f"@{reply_to.from_user.username}"
         else:
             tag = reply_to.from_user.mention_html(reply_to.from_user.first_name)
-    appdrive_link = is_appdrive_link(link)
-    if appdrive_link:
+    if appdrive_link := is_appdrive_link(link):
         try:
             link = appdrive(link)
         except DirectDownloadLinkException as e:
             return sendMessage(str(e), context.bot, update.message)
-    gdtot_link = is_gdtot_link(link)
-    if gdtot_link:
+    if gdtot_link := is_gdtot_link(link):
         try:
             link = gdtot(link)
         except DirectDownloadLinkException as e:
