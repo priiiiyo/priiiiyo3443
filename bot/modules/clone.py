@@ -176,7 +176,7 @@ def _clone(message, bot, multi=0):
             pmwarn = ""
         uploadmsg = sendMarkup(result + cc + pmwarn + warnmsg, bot, message, button)
         Thread(target=auto_delete_upload_message, args=(bot, message, uploadmsg).start()
-        if MIRROR_LOGS:
+        if MIRROR_LOGS
                 for i in MIRROR_LOGS:
                     bot.sendMessage(
                         chat_id=i,
