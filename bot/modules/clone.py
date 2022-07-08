@@ -176,19 +176,19 @@ def _clone(message, bot, multi=0):
             pmwarn = ""
         uploadmsg = sendMarkup(result + cc + pmwarn + warnmsg, bot, message, button)
         Thread(target=auto_delete_upload_message, args=(bot, message, uploadmsg).start()
-    if MIRROR_LOGS:
-        try:
-            for i in MIRROR_LOGS:
-                bot.sendMessage(chat_id=i, text=result + cc, reply_markup=button, parse_mode=ParseMode.HTML)
-        except Exception as e:
-            LOGGER.warning(e)
-            if BOT_PM and message.chat.type != "private":
-                try:
-                    LOGGER.info(message.chat.type)
-                    bot.sendMessage(message.from_user.id, text=result + cc, reply_markup=button, parse_mode=ParseMode.HTML)
-                except Exception as e:
-                    LOGGER.warning(e)
-                    return
+        if MIRROR_LOGS:
+            try:
+               for i in MIRROR_LOGS:
+                   bot.sendMessage(chat_id=i, text=result + cc, reply_markup=button, parse_mode=ParseMode.HTML)
+            except Exception as e:
+                LOGGER.warning(e)
+        if BOT_PM and message.chat.type != "private":
+            try:
+                LOGGER.info(message.chat.type)
+                bot.sendMessage(message.from_user.id, text=result + cc, reply_markup=button, parse_mode=ParseMode.HTML)
+            except Exception as e:
+                LOGGER.warning(e)
+                return
             sendMarkup(result + cc, bot, message, button)
             LOGGER.info(f'Cloning Done: {name}')
     else:
