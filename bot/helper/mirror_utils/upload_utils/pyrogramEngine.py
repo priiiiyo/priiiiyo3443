@@ -103,7 +103,7 @@ class TgUploader:
                         width = 480
                         height = 320
                     if not file_.upper().endswith(("MKV", "MP4")):
-                        file_ = ospath.splitext(file_)[0] + '.mp4'
+                        file_ = f'{ospath.splitext(file_)[0]}.mp4'
                         new_path = ospath.join(dirpath, file_)
                         osrename(up_path, new_path)
                         up_path = new_path
@@ -165,12 +165,12 @@ class TgUploader:
                                 except Exception as err:
                                     LOGGER.error(f"Failed To Send Image in PM:\n{err}")
                     if LEECH_LOG_ALT:
-                                try:
-                                    msg.reply_photo(chat_id=i, photo=self.__sent_msg.photo.file_id, quote=True, caption=cap_mono)
-                                except Exception as err:
-                                    LOGGER.error(f"Failed To Send Image in Alt Leech Log:\n{err}")       
+                        try:
+                            msg.reply_photo(chat_id=i, photo=self.__sent_msg.photo.file_id, quote=True, caption=cap_mono)
+                        except Exception as err:
+                            LOGGER.error(f"Failed To Send Image in Alt Leech Log:\n{err}")
                     else:
-                        LOGGER.warning(f"Image Leech is Blocked by Owner")
+                        LOGGER.warning("Image Leech is Blocked by Owner")
                 else:
                     notMedia = True
             if self.__as_doc or notMedia:

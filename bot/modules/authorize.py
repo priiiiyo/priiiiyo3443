@@ -174,10 +174,7 @@ def removeMod(update, context):
     if len(message_) == 2:
         user_id = int(message_[1])
         if user_id in MOD_USERS:
-            if DB_URI is not None:
-                msg = DbManger().user_rmmod(user_id)
-            else:
-                msg = "Demoted"
+            msg = DbManger().user_rmmod(user_id) if DB_URI is not None else "Demoted"
             MOD_USERS.remove(user_id)
         else:
             msg = "Not Moderator to demote!"
@@ -186,10 +183,7 @@ def removeMod(update, context):
     else:
         user_id = reply_message.from_user.id
         if user_id in MOD_USERS:
-            if DB_URI is not None:
-                msg = DbManger().user_rmmod(user_id)
-            else:
-                msg = "Demoted"
+            msg = DbManger().user_rmmod(user_id) if DB_URI is not None else "Demoted"
             MOD_USERS.remove(user_id)
         else:
             msg = "Not Moderator to demote!"

@@ -34,11 +34,11 @@ def start(update, context):
         if BOT_PM:
             reply_message = sendMarkup(f'𝗗𝗲𝗮𝗿 {update.message.chat.first_name} ({update.message.chat.username}), \n\n\n 𝗜𝗳 𝗬𝗼𝘂 𝗪𝗮𝗻𝘁 𝗧𝗼 𝗨𝘀𝗲 𝗠𝗲, 𝗬𝗼𝘂 𝗛𝗮𝘃𝗲 𝗧𝗼 𝗝𝗼𝗶𝗻 𝗠𝘆 𝗠𝗶𝗿𝗿𝗼𝗿 𝗚𝗿𝗼𝘂𝗽 𝗕𝘆 𝗖𝗹𝗶𝗰𝗸𝗶𝗻𝗴 𝗧𝗵𝗲 𝗕𝗲𝗹𝗼𝘄 𝗕𝘂𝘁𝘁𝗼𝗻.', context.bot, update.message, reply_markup)
             Thread(target=auto_delete_message, args=(context.bot, update.message, reply_message)).start()
-            return
         else:
             reply_message = sendMarkup(f'Dear {uname},You have started me\n\n', context.bot, update, reply_markup)
             Thread(target=auto_delete_message, args=(context.bot, update.message, message)).start()
-            return
+
+        return
 
 def restart(update, context):
     cmd = update.effective_message.text.split(' ', 1)
@@ -247,8 +247,7 @@ def main():
         except BadRequest as e:
             LOGGER.warning(e.message)
     if INCOMPLETE_TASK_NOTIFIER and DB_URI is not None:
-        notifier_dict = DbManger().get_incomplete_tasks()
-        if notifier_dict:
+        if notifier_dict := DbManger().get_incomplete_tasks():
             for cid, data in notifier_dict.items():
                 if ospath.isfile(".restartmsg"):
                     with open(".restartmsg") as f:

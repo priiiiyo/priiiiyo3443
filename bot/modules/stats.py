@@ -38,7 +38,7 @@ def getHerokuDetails(h_api_key, h_app_name):
             "Authorization": f"Bearer {h_api_key}",
             "Accept": "application/vnd.heroku+json; version=3.account-quotas",
         }
-        path = "/accounts/" + user_id + "/actions/get-quota"
+        path = f"/accounts/{user_id}/actions/get-quota"
         session = requests.Session()
         result = (session.get(heroku_api + path, headers=headers)).json()
         abc = ""
@@ -58,14 +58,12 @@ def getHerokuDetails(h_api_key, h_app_name):
                 except Exception as t:
                     LOGGER.error("error when adding main dyno")
                     LOGGER.error(t)
-                    pass
             else:
                 try:
                     OtherAppsUsage += int(apps.get("quota_used"))
                 except Exception as t:
                     LOGGER.error("error when adding other dyno")
                     LOGGER.error(t)
-                    pass
         LOGGER.info(f"This App: {str(app.name)}")
         abc += f"App Usage: {get_readable_time(AppQuotaUsed)}"
         abc += f" | Other Apps: {get_readable_time(OtherAppsUsage)}"
